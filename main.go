@@ -94,16 +94,12 @@ func main() {
 	fmt.Printf("%#v\n", items)
 
 	var polygon orb.Point
-	query := "SELECT ST_AsBinary(gis) FROM gis_test WHERE name = '张三'"
+	query := "SELECT ST_AsBinary(gis) FROM gis_test WHERE name = 'a'"
 	row := db.QueryRow(query)
 	err = row.Scan(wkb.Scanner(&polygon))
 	fmt.Printf("%#v\n", polygon)
 	fmt.Printf("%#v\n", wkt.MarshalString(polygon))
 	fmt.Printf("%#v\n", wkb.Value(polygon))
-	/*p := orb.Point{
-		108.9498710632,
-		34.2588125935,
-	}*/
 	_, err = db.Exec(`INSERT INTO gis_test (id, name, gis) VALUES (10, 'e', st_geomfromwkb(?))`, wkb.Value(polygon))
 	fmt.Println(err)
 }
